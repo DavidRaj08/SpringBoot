@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Getting Started: Handling Form Submission</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Form</h1>
+	<form action="#" th:action="@{/register}" th:object="${user}"
+		method="post" enctype="multipart/form-data">
+		<!-- 	<p>User Id: <input type="text" th:field="*{userId}" /></p> -->
+		<table>
+			<tr>
+				<td>User Name: <input type="text" th:field="*{username}" /></td>
+			</tr>
+			<tr>
+				<td>Password: <input type="password" th:field="*{password}" />
+			<tr>
+				<td>First Name: <input type="text" th:field="*{firstName}" />
+			<tr>
+				<td>Last Name: <input type="text" th:field="*{lastName}" />
+			<tr>
+				<td>Email: <input type="text" th:field="*{email}" />
+			<tr>
+				<td>Phone Number: <input type="text" th:field="*{phoneNumber}" />
+			<tr>
+				<td>Experience: <select th:field="*{experience}">
+						<option th:each="exp: ${user.experience}" th:value="${exp}"
+							th:text="${exp}"></option>
+				</select> <!-- <p>Experience: <input type="text" th:field="*{experience}" /></p> -->
+			<tr>
+				<td>Notice Period: <select th:field="*{noticePeriod}">
+						<option th:each="notPeriod: ${user.noticePeriod}"
+							th:value="${notPeriod}" th:text="${notPeriod}"></option>
+				</select> <!-- <p>Notice Period: <input type="text" th:field="*{noticePeriod}" /></p> -->
+			<tr>
+				<td><input type="file" th:field="*{file}" /></td>
+			</tr>
+			<tr><td></td></tr>
+			<tr>
+				<td><input type="submit" value="Submit" /> <input type="reset"
+					value="Reset" /></td>
+			</tr>
+
+		</table>
+	</form>
+</body>
+</html>
