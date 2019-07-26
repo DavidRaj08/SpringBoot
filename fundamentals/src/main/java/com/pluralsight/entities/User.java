@@ -1,13 +1,13 @@
 package com.pluralsight.entities;
 
 import java.util.Arrays;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,11 +33,12 @@ public class User {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
-	private List<String> experience;
+	private String experience;
 
 	@Column(name = "notice_period")
-	private List<String> noticePeriod;
+	private String noticePeriod;
 
+	@Transient
 	private MultipartFile[] file;
 
 	public Integer getUserId() {
@@ -96,19 +97,19 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public List<String> getExperience() {
+	public String getExperience() {
 		return experience;
 	}
 
-	public void setExperience(List<String> experience) {
+	public void setExperience(String experience) {
 		this.experience = experience;
 	}
 
-	public List<String> getNoticePeriod() {
+	public String getNoticePeriod() {
 		return noticePeriod;
 	}
 
-	public void setNoticePeriod(List<String> noticePeriod) {
+	public void setNoticePeriod(String noticePeriod) {
 		this.noticePeriod = noticePeriod;
 	}
 
