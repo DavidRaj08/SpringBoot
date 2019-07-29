@@ -5,14 +5,45 @@
 <title>Welcome</title>
 </head>
 <body>
-<h3>Welcome to Welcome Page</h3>
-<!-- <p th:text="'id: ' + ${user.userId}" /> -->
-<!-- <p th:text="'id: ' + ${greeting.id}" />
-<p th:text="'id: ' + ${greeting.id}" />
-<p th:text="'id: ' + ${greeting.id}" />
-<p th:text="'id: ' + ${greeting.id}" />
-<p th:text="'id: ' + ${greeting.id}" />
-<p th:text="'id: ' + ${greeting.id}" />
-<p th:text="'id: ' + ${greeting.id}" /> -->
+	<h3>Welcome Page</h3>
+	<table>
+		<tr>
+		<td>User Id</td>
+			<td th:text="${user.userId}" >
+			</td>
+		</tr>
+		<tr>
+			<td>User Name</td>
+			<td th:text="${user.username}"></td>
+		</tr>
+		<tr>
+			<td>First Name</td>
+			<td th:text="${user.firstName}"></td>
+		</tr>
+		<tr>
+			<td>Last Name</td>
+			<td th:text="${user.lastName}"></td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td th:text="${user.email}"></td>
+		</tr>
+		<tr>
+			<td>Phone Number</td>
+			<td th:text="${user.phoneNumber}"></td>
+		</tr>
+		<tr>
+			<td>Experience</td>
+			<td th:text="${user.experience}"></td>
+		</tr>
+		<tr>
+			<td>Notice Period</td>
+			<td th:text="${user.noticePeriod}"></td>
+		</tr>
+		<tr>
+			<td><a th:href="'/edit/' + ${user.userId}">Edit</a></td>
+		</tr>
+	</table>
+
 </body>
 </html>

@@ -5,11 +5,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +25,14 @@ import com.pluralsight.repositorities.RegistrationRepository;
 @Controller
 public class RegistrationController {
 
-	//private static String UPLOADED_FOLDER = "C:\\Users\\dsamband\\Documents\\ProjectFiles";
-	
+	// private static String UPLOADED_FOLDER =
+	// "C:\\Users\\dsamband\\Documents\\ProjectFiles";
+
 	@Autowired
 	RegistrationRepository registration;
+
+	/*@Autowired
+	private RegistrationService service;*/
 
 	@GetMapping("/register")
 	public String registerUser(Model model, User user) {
@@ -35,7 +43,7 @@ public class RegistrationController {
 
 	@PostMapping("/register")
 	public String welcomeUser(@ModelAttribute User user, @RequestParam("file") MultipartFile file,
-			RedirectAttributes redirectAttributes) {
+			BindingResult result, RedirectAttributes redirectAttributes) {
 		System.out.println("--------------Registration Controller POST--------------");
 		if (file.isEmpty()) {
 			redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
@@ -47,14 +55,36 @@ public class RegistrationController {
 			byte[] bytes = file.getBytes();
 			Path path = Paths.get(file.getOriginalFilename());
 			Files.write(path, bytes);
-			String fileName = path.getFileName().toString();
-			System.out.println(fileName);
-			//System.out.println(f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf("\\")+1));
+			// String fileName = path.getFileName().toString();
+			// System.out.println(f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf("\\")+1));
 			redirectAttributes.addFlashAttribute("message",
 					"You successfully uploaded '" + file.getOriginalFilename() + "'");
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+
+		if(result.hasErrors()) {
+			return "register";
+		}
+		registration.save(user);
+		return "welcome";
+	}
+
+	@GetMapping("/edit/{userId}")
+	public String saveUser(@PathVariable("userId") long userId, Model model, @ModelAttribute User user) {
+		//user = service.get(userId);
+		user = registration.findById(userId).get();
+		model.addAttribute(user);
+		return "edit";
+	}
+
+	@PostMapping("/edit/{userId}")
+	public String updateUser(@PathVariable("userId") long userId, @Valid @ModelAttribute User user,
+			BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			user.setUserId(userId);
+			return "edit";
 		}
 
 		registration.save(user);
@@ -68,7 +98,7 @@ public class RegistrationController {
 
 	@ModelAttribute("noticedropdownValues")
 	public String[] getnoticedropdownValues() {
-		return new String[] { "0-15", "15-30", "30-60", "90>" };
+		return new String[] { "0-15", "15-30", "30-60", "90" };
 	}
 
 }

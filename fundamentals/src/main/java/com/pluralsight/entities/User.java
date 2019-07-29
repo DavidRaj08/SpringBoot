@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "user_id")
-	private Integer userId;
+	private long userId;
 
 	private String username;
 	private String password;
@@ -41,11 +42,11 @@ public class User {
 	@Transient
 	private MultipartFile[] file;
 
-	public Integer getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
@@ -127,6 +128,24 @@ public class User {
 				+ firstName + ", lastName=" + lastName + ", email=" + email + ", phoneNumber=" + phoneNumber
 				+ ", experience=" + experience + ", noticePeriod=" + noticePeriod + ", file=" + Arrays.toString(file)
 				+ "]";
+	}
+
+	public User(long userId, String username, String password, String firstName, String lastName, String email,
+			String phoneNumber, String experience, String noticePeriod, MultipartFile[] file) {
+		this.userId = userId;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.experience = experience;
+		this.noticePeriod = noticePeriod;
+		this.file = file;
+	}
+
+	public User() {
+
 	}
 
 }
