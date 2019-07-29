@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Email;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +29,7 @@ public class User {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@Email
 	private String email;
 
 	@Column(name = "phone_number")
