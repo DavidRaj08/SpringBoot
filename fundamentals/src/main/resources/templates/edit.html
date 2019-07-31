@@ -1,16 +1,21 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"
+	href="../static/css/home.css"></link>
 <title>Edit User</title>
 </head>
 
 <body>
+	<div align="center">
 	<h1>Edit User Form</h1>
-	<form th:action="@{'/edit/' + ${userId}}"
-		th:object="${user}" method="post" enctype="multipart/form-data">
+	<hr/>
+
+	<form th:action="@{'/edit/' + ${userId}}" th:object="${user}"
+		method="post" enctype="multipart/form-data">
 		<table>
 			<tr>
 				<td>User Id</td>
@@ -19,19 +24,21 @@
 			</tr>
 			<tr>
 				<td>User Name</td>
-				<td><input type="text" th:field="${user.username}" th:required="required" /></td>
+				<td><input type="text" th:field="${user.username}"
+					th:required="required" maxlength="20" /></td>
 			</tr>
 			<tr>
 				<td>Password</td>
-				<td><input type="text" th:field="${user.password}" readonly="readonly"></td>
+				<td><input type="password" th:field="${user.password}"
+					readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td>First Name</td>
-				<td><input type="text" th:field="${user.firstName}"></td>
+				<td><input type="text" th:field="${user.firstName}" maxlength="50" ></td>
 			</tr>
 			<tr>
 				<td>Last Name</td>
-				<td><input type="text" th:field="${user.lastName}"></td>
+				<td><input type="text" th:field="${user.lastName}" maxlength="50" ></td>
 			</tr>
 			<tr>
 				<td>Email</td>
@@ -39,20 +46,21 @@
 			</tr>
 			<tr>
 				<td>Phone Number</td>
-				<td><input type="text" th:field="${user.phoneNumber}"></td>
+				<td><input type="text" th:field="${user.phoneNumber}" maxlength="10" ></td>
 			</tr>
-			
+
 			<tr>
-				<td>Experience: </td><td><select th:field="${user.experience}" th:required="required" ><option
-							value="">--</option>
+				<td>Experience:</td>
+				<td><select th:field="${user.experience}"
+					th:required="required"><option value="">--</option>
 						<option th:each="exp: ${expDropdownValues}" th:value="${exp}"
 							th:text="${exp}"></option>
 				</select> in Years</td>
 			<tr>
 			<tr>
 				<td>Notice Period</td>
-				<td><select th:field="${user.noticePeriod}" th:required="required" ><option
-							value="">--</option>
+				<td><select th:field="${user.noticePeriod}"
+					th:required="required"><option value="">--</option>
 						<option th:each="notPeriod: ${noticedropdownValues}"
 							th:value="${notPeriod}" th:text="${notPeriod}"></option></select> in Days
 				</td>
@@ -61,11 +69,11 @@
 				<td><input type="file" th:field="*{file}" /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="submit" value="Submit" /> <input type="reset"
-					value="Reset" /></td>
+				<td colspan="2"><input type="submit" value="Submit" /> <input
+					type="reset" value="Reset" /></td>
 			</tr>
 
 		</table>
-	</form>
+	</form></div>
 </body>
 </html>

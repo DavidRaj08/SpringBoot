@@ -3,3 +3,15 @@
 error {
 	color: red;
 }
+
+body {
+	background-color: #87CEEB;
+}
+
+h1 {
+	align-content: center;
+}
+
+div {
+	align-content: center;
+}

@@ -1,16 +1,23 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"
+	href="../static/css/home.css"></link>
 <title>Welcome</title>
 </head>
 <body>
-	<h3>Welcome Page</h3>
+${message}
+<h2>Success</h2>
+<div align="center">
+	<h1>Welcome Page</h1>
+		<hr/>
 	<table>
 		<tr>
-		<td>User Id</td>
-			<td th:text="${user.userId}" >
-			</td>
+			<td>User Id</td>
+			<td th:text="${user.userId}"></td>
 		</tr>
 		<tr>
 			<td>User Name</td>
@@ -44,6 +51,6 @@
 			<td><a th:href="'/edit/' + ${user.userId}">Edit</a></td>
 		</tr>
 	</table>
-
+</div>
 </body>
 </html>
