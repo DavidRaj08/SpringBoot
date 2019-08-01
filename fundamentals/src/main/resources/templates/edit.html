@@ -11,69 +11,74 @@
 
 <body>
 	<div align="center">
-	<h1>Edit User Form</h1>
-	<hr/>
+		<h1>Edit User Form</h1>
+		<hr />
 
-	<form th:action="@{'/edit/' + ${userId}}" th:object="${user}"
-		method="post" enctype="multipart/form-data">
-		<table>
-			<tr>
-				<td>User Id</td>
-				<td><input type="text" th:field="${user.userId}"
-					readonly="readonly" /></td>
-			</tr>
-			<tr>
-				<td>User Name</td>
-				<td><input type="text" th:field="${user.username}"
-					th:required="required" maxlength="20" /></td>
-			</tr>
-			<tr>
-				<td>Password</td>
-				<td><input type="password" th:field="${user.password}"
-					readonly="readonly"></td>
-			</tr>
-			<tr>
-				<td>First Name</td>
-				<td><input type="text" th:field="${user.firstName}" maxlength="50" ></td>
-			</tr>
-			<tr>
-				<td>Last Name</td>
-				<td><input type="text" th:field="${user.lastName}" maxlength="50" ></td>
-			</tr>
-			<tr>
-				<td>Email</td>
-				<td><input type="text" th:field="${user.email}"></td>
-			</tr>
-			<tr>
-				<td>Phone Number</td>
-				<td><input type="text" th:field="${user.phoneNumber}" maxlength="10" ></td>
-			</tr>
+		<form th:action="@{'/edit/' + ${userId}}" th:object="${user}"
+			method="post" enctype="multipart/form-data">
+			<table>
+				<tr>
+					<td>User Id</td>
+					<td><input type="text" th:field="${user.userId}"
+						readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<td>User Name</td>
+					<td><input type="text" th:field="${user.username}"
+						th:required="required" maxlength="20" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" th:field="${user.password}"
+						readonly="readonly"></td>
+				</tr>
+				<tr>
+					<td>First Name</td>
+					<td><input type="text" th:field="${user.firstName}"
+						maxlength="50"></td>
+				</tr>
+				<tr>
+					<td>Last Name</td>
+					<td><input type="text" th:field="${user.lastName}"
+						maxlength="50"></td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td><input type="text" th:field="${user.email}"></td>
+				</tr>
+				<tr>
+					<td>Phone Number</td>
+					<td><input type="text" th:field="${user.phoneNumber}"
+						maxlength="10"></td>
+				</tr>
 
-			<tr>
-				<td>Experience:</td>
-				<td><select th:field="${user.experience}"
-					th:required="required"><option value="">--</option>
-						<option th:each="exp: ${expDropdownValues}" th:value="${exp}"
-							th:text="${exp}"></option>
-				</select> in Years</td>
-			<tr>
-			<tr>
-				<td>Notice Period</td>
-				<td><select th:field="${user.noticePeriod}"
-					th:required="required"><option value="">--</option>
-						<option th:each="notPeriod: ${noticedropdownValues}"
-							th:value="${notPeriod}" th:text="${notPeriod}"></option></select> in Days
-				</td>
-			</tr>
-			<tr>
-				<td><input type="file" th:field="*{file}" /></td>
-			</tr>
-			<tr>
-				<td colspan="2"><input type="submit" value="Submit" /> <input
-					type="reset" value="Reset" /></td>
-			</tr>
+				<tr>
+					<td>Experience:</td>
+					<td><select th:field="${user.experience}"
+						th:required="required"><option value="">--</option>
+							<option th:each="exp: ${expDropdownValues}" th:value="${exp}"
+								th:text="${exp}"></option>
+					</select> in Years</td>
+				<tr>
+				<tr>
+					<td>Notice Period</td>
+					<td><select th:field="${user.noticePeriod}"
+						th:required="required"><option value="">--</option>
+							<option th:each="notPeriod: ${noticedropdownValues}"
+								th:value="${notPeriod}" th:text="${notPeriod}"></option></select> in Days
+					</td>
+				</tr>
+				<tr>
+					<td>Upload a file</td><td><input type="file" th:field="*{file}" /></td>
+				</tr>
+				<tr>
+					<td colspan="3"><input type="submit" value="Submit" /> <input
+						type="reset" value="Reset" /></td>
+					<td><button onclick="window.history.go(-1); return false;">Back</button></td>
+				</tr>
 
-		</table>
-	</form></div>
+			</table>
+		</form>
+	</div>
 </body>
 </html>

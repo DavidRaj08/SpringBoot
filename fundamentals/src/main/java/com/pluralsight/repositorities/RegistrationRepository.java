@@ -8,6 +8,8 @@ import com.pluralsight.entities.User;
 @Repository
 public interface RegistrationRepository extends CrudRepository<User, Long> {
 
+	User findByUsername(String username);
+
 	//User registerUser(User user);
 
 	

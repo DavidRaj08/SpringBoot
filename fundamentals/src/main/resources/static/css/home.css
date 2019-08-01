@@ -1,7 +1,13 @@
 @charset "ISO-8859-1";
 
-error {
+p.error {
 	color: red;
+	font: bold;
+}
+
+h3.error {
+	color: red;
+	font: bold;
 }
 
 body {
@@ -14,4 +20,24 @@ h1 {
 
 div {
 	align-content: center;
+}
+
+.buttonStyle {
+	background-color: #4CAF50;
+	color: white;
+	padding: 9px 12px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+}
+
+.reset {
+	background-color: #c0c0c0;
+	color: white;
+	padding: 9px 12px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	width: 100%;
 }

@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.pluralsight.entities.Login;
 import com.pluralsight.entities.User;
 import com.pluralsight.repositorities.RegistrationRepository;
+import com.pluralsight.service.RegistrationService;
 
 @Controller
 public class RegistrationController {
@@ -35,14 +37,24 @@ public class RegistrationController {
 	// "C:\\Users\\dsamband\\Documents\\ProjectFiles";
 
 	@Autowired
+	RegistrationService service;
+	
+	@Autowired
 	RegistrationRepository registration;
 
 	private String password;
 
-	/*
-	 * @Autowired private RegistrationService service;
-	 */
-
+	@RequestMapping(value = "/{[path:[^\\.]*}")
+    public String redirect() {
+        return "forward:/home";
+    }
+	
+	
+	@GetMapping("/home")
+	public String home() {
+		return "home";
+	}
+	
 	@GetMapping("/register")
 	public String registerUser(Model model, User user) {
 		System.out.println("--------------Registration Controller GET--------------");
@@ -80,6 +92,20 @@ public class RegistrationController {
 		
 		redirectAttributes.addAttribute("id", user.getUserId()).addFlashAttribute("message", "Account created!");
 		System.out.println("message---->"+redirectAttributes.getFlashAttributes());
+		return "welcome";
+	}
+	
+	
+	@GetMapping("/login")
+	public String loginPage(Model model, Login login) {
+		model.addAttribute("login", new Login());
+		return "login";
+	}
+	
+	@PostMapping("/login")
+	public String login(@ModelAttribute Login loginDetails, Model model) {
+		User user = service.login(loginDetails);
+		model.addAttribute(user);
 		return "welcome";
 	}
 

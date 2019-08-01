@@ -19,12 +19,12 @@
 				<tr>
 					<td>User Name</td>
 					<td><input type="text" th:field="*{username}"
-						th:required="required" maxlength="20" /></td>
+						th:required="required" maxlength="20" placeholder="Enter your username" /></td>
 				</tr>
 				<tr>
 					<td>Password</td>
 					<td><input type="password" th:field="*{password}"
-						th:required="required" />
+						th:required="required" placeholder="Enter your password" />
 				<tr>
 					<td>First Name</td>
 					<td><input type="text" th:field="*{firstName}"
@@ -40,7 +40,7 @@
 				<tr>
 					<td>Phone Number</td>
 					<td><input type="text" th:field="*{phoneNumber}"
-						th:required="required" maxlength="10" />
+						th:required="required" maxlength="10" placeholder="9876543210" />
 				<tr>
 					<td>Experience</td>
 					<td><select th:field="*{experience}" th:required="required"><option
@@ -64,7 +64,7 @@
 					<td></td>
 				</tr>
 				<tr>
-					<td><input type="submit" value="Submit" /> <input
+					<td align="center"><input type="submit" value="Submit" /></td><td> <input
 						type="reset" value="Reset" /></td>
 				</tr>
 

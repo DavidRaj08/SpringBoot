@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <link rel="stylesheet"
@@ -6,15 +6,18 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"
 	href="../static/css/home.css"></link>
 <meta charset="ISO-8859-1">
-<title>Error</title>
+<title>Home</title>
 </head>
 <body>
-
 	<div align="center">
-	<h3 class=error>Error</h3>
-	<hr/>
-		<p class="error">The requested page is not found</p>
-		<p>Please check the logs for error details</p>
+	<h3>Home</h3>
+		<table>
+			<tr>
+				<td><button onclick="window.location.href='register'">Register</button></td>
+				<td><button onclick="window.location.href='login'">Login</button></td>
+			</tr>
+
+		</table>
 	</div>
 </body>
 </html>

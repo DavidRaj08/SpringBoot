@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"
+	href="../static/css/home.css"></link>
+<title>Login Form</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div align="center">
+		<h1>Form</h1>
+		<hr />
+
+		<form action="#" th:action="@{/login}" th:object="${login}"
+			method="post">
+			<table>
+				<tr>
+					<td align="left">User Name</td>
+					<td align="center">:</td>
+					<td align="right"><input type="text" th:field="*{username}"
+						th:required="required" maxlength="20"
+						placeholder="Enter your username" /></td>
+				</tr>
+				<tr>
+					<td align="left">Password</td>
+					<td align="center">:</td>
+					<td align="right"><input type="password"
+						th:field="*{password}" th:required="required"
+						placeholder="Enter your password" /></td>
+			</table>
+			<div>
+				<table>
+					<tr>
+						<td align="left"><input type="submit" value="Submit"
+							class="buttonStyle" /></td>
+						<td align="right"><input type="reset" value="Reset"
+							class="reset" /></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
