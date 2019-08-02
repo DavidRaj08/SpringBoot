@@ -17,58 +17,78 @@
 			method="post" enctype="multipart/form-data">
 			<table>
 				<tr>
-					<td>User Name</td>
+
+					<td align="left" style="height: 37px; width: 180px;">User Name</td>
+
+
 					<td><input type="text" th:field="*{username}"
-						th:required="required" maxlength="20" placeholder="Enter your username" /></td>
+						th:required="required" maxlength="20"
+						placeholder="Enter your username" /></td>
 				</tr>
 				<tr>
-					<td>Password</td>
+					<td align="left" style="height: 37px; width: 180px;">Password</td>
+
 					<td><input type="password" th:field="*{password}"
 						th:required="required" placeholder="Enter your password" />
 				<tr>
-					<td>First Name</td>
+					<td align="left" style="height: 37px; width: 180px;">First
+						Name</td>
+
 					<td><input type="text" th:field="*{firstName}"
 						th:required="required" placeholder="John" maxlength="50" />
 				<tr>
-					<td>Last Name</td>
+					<td align="left" style="height: 37px; width: 180px;">Last
+						Name</td>
+
 					<td><input type="text" th:field="*{lastName}"
 						th:required="required" placeholder="Doe" maxlength="50" />
 				<tr>
-					<td>Email</td>
+					<td align="left" style="height: 37px; width: 180px;">Email</td>
+
 					<td><input type="email" th:field="*{email}"
 						th:required="required" placeholder="john.doe@domain.com" />
 				<tr>
-					<td>Phone Number</td>
+					<td align="left" style="height: 37px; width: 180px;">Phone
+						Number</td>
+
 					<td><input type="text" th:field="*{phoneNumber}"
 						th:required="required" maxlength="10" placeholder="9876543210" />
 				<tr>
-					<td>Experience</td>
+					<td align="left" style="height: 37px; width: 180px;">Experience</td>
+
 					<td><select th:field="*{experience}" th:required="required"><option
 								value="">--</option>
 							<option th:each="exp: ${expDropdownValues}" th:value="${exp}"
 								th:text="${exp}"></option>
 					</select> in Years
 				<tr>
-					<td>Notice Period</td>
+					<td align="left" style="height: 37px; width: 180px;">Notice
+						Period</td>
+
 					<td><select th:field="*{noticePeriod}" th:required="required"><option
 								value="">--</option>
 							<option th:each="notPeriod: ${noticedropdownValues}"
 								th:value="${notPeriod}" th:text="${notPeriod}"></option>
 					</select>in Days
 				<tr>
-					<td>Upload a file</td>
+					<td align="left" style="height: 37px; width: 180px;">Upload a
+						file</td>
+
 					<td><input type="file" th:field="*{file}"
 						th:required="required" /></td>
 				</tr>
-				<tr>
-					<td></td>
-				</tr>
-				<tr>
-					<td align="center"><input type="submit" value="Submit" /></td><td> <input
-						type="reset" value="Reset" /></td>
-				</tr>
 
 			</table>
+			<div align="center">
+				<table>
+					<tr>
+						<td align="left" style="padding-right: 10px;"><input
+							type="submit" value="Submit" class="buttonStyle" /></td>
+
+						<td><input type="reset" value="Reset" class="reset" /></td>
+					</tr>
+				</table>
+			</div>
 		</form>
 	</div>
 </body>

@@ -43,6 +43,9 @@ public class User {
 	@Transient
 	private MultipartFile[] file;
 
+	@Transient
+	private String message;
+
 	public long getUserId() {
 		return userId;
 	}
@@ -123,16 +126,16 @@ public class User {
 		this.file = file;
 	}
 
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", email=" + email + ", phoneNumber=" + phoneNumber
-				+ ", experience=" + experience + ", noticePeriod=" + noticePeriod + ", file=" + Arrays.toString(file)
-				+ "]";
+	public String getMessage() {
+		return message;
 	}
 
-	public User(long userId, String username, String password, String firstName, String lastName, String email,
-			String phoneNumber, String experience, String noticePeriod, MultipartFile[] file) {
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public User(long userId, String username, String password, String firstName, String lastName, @Email String email,
+			String phoneNumber, String experience, String noticePeriod, MultipartFile[] file, String message) {
 		this.userId = userId;
 		this.username = username;
 		this.password = password;
@@ -143,10 +146,19 @@ public class User {
 		this.experience = experience;
 		this.noticePeriod = noticePeriod;
 		this.file = file;
+		this.message = message;
 	}
 
 	public User() {
 
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", email=" + email + ", phoneNumber=" + phoneNumber
+				+ ", experience=" + experience + ", noticePeriod=" + noticePeriod + ", file=" + Arrays.toString(file)
+				+ ", message=" + message + "]";
 	}
 
 }

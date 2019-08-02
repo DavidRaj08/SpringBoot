@@ -29,7 +29,7 @@ div {
 	margin: 8px 0;
 	border: none;
 	cursor: pointer;
-	width: 100%;
+	width: 80%;
 }
 
 .reset {
@@ -40,4 +40,10 @@ div {
 	border: none;
 	cursor: pointer;
 	width: 100%;
+}
+
+td {
+	align: left;
+	height: 37px;
+	width: 180px;
 }

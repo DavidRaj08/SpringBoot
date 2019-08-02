@@ -1,10 +1,5 @@
 package com.pluralsight.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,26 +33,24 @@ public class RegistrationController {
 
 	@Autowired
 	RegistrationService service;
-	
+
 	@Autowired
 	RegistrationRepository registration;
 
 	private String password;
 
 	@RequestMapping(value = "/{[path:[^\\.]*}")
-    public String redirect() {
-        return "forward:/home";
-    }
-	
-	
+	public String redirect() {
+		return "forward:/home";
+	}
+
 	@GetMapping("/home")
 	public String home() {
 		return "home";
 	}
-	
+
 	@GetMapping("/register")
 	public String registerUser(Model model, User user) {
-		System.out.println("--------------Registration Controller GET--------------");
 		model.addAttribute("register", new User());
 		return "register";
 	}
@@ -69,39 +62,25 @@ public class RegistrationController {
 			redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
 			return "redirect:uploadStatus";
 		}
-		try {
-
-			// Get the file and save it somewhere
-			byte[] bytes = file.getBytes();
-			Path path = Paths.get(file.getOriginalFilename());
-			Files.write(path, bytes);
-			// String fileName = path.getFileName().toString();
-			// System.out.println(f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf("\\")+1));
-			redirectAttributes.addFlashAttribute("message",
-					"You successfully uploaded '" + file.getOriginalFilename() + "'");
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		if (result.hasErrors()) {
 			return "register";
 		}
-		
+
 		registration.save(user);
-		
-		redirectAttributes.addAttribute("id", user.getUserId()).addFlashAttribute("message", "Account created!");
-		System.out.println("message---->"+redirectAttributes.getFlashAttributes());
+		if (user.getUserId() != 0) {
+			user.setMessage("User created successfully");
+		}
+
 		return "welcome";
 	}
-	
-	
+
 	@GetMapping("/login")
 	public String loginPage(Model model, Login login) {
 		model.addAttribute("login", new Login());
 		return "login";
 	}
-	
+
 	@PostMapping("/login")
 	public String login(@ModelAttribute Login loginDetails, Model model) {
 		User user = service.login(loginDetails);
@@ -126,26 +105,19 @@ public class RegistrationController {
 			return "edit";
 		}
 		user.setPassword(password);
+		user.setMessage("User details updated successfully");
 		registration.save(user);
 		return "welcome";
 	}
 
 	@RequestMapping(value = "/showResume", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getPDF1() {
-		/*
-		 * Path path = Paths.get("C:\\Users\\dsamband\\Documents\\"); byte[] pdfContents
-		 * = null; try { pdfContents = Files.readAllBytes(path); } catch (IOException e)
-		 * { e.printStackTrace(); }
-		 */
-
 		HttpHeaders headers = new HttpHeaders();
-
 		headers.setContentType(MediaType.parseMediaType("application/pdf"));
-		String filename = "C:\\Users\\dsamband\\Documents\\01-Capgemini_GCLP_English_V1.pdf";
-
+		String filename = "C:\\Users\\dsamband\\Documents\\Training_OOPS.pdf";
 		headers.add("content-disposition", "inline;filename=" + filename);
-
-		// headers.setContentDispositionFormData(filename, filename);
+		filename = filename.substring(filename.lastIndexOf("\\") + 1);
+		headers.setContentDispositionFormData(filename, filename);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(headers, HttpStatus.OK);
 		return response;
