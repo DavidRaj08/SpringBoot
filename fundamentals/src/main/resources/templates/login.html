@@ -9,6 +9,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+<div class="alert alert-danger" align="center" th:if="${login.message != null}">
+		<span th:text="${login.message}"> </span>
+	</div>
 	<div align="center">
 		<h1>Form</h1>
 		<hr />
@@ -33,10 +36,9 @@
 			<div>
 				<table>
 					<tr>
-						<td align="left"><input type="submit" value="Submit"
+						<td><input type="submit" value="Submit"
 							class="buttonStyle" /></td>
-							<td></td>
-						<td align="right"><input type="reset" value="Reset"
+						<td><input type="reset" value="Reset"
 							class="reset" /></td>
 					</tr>
 				</table>

@@ -26,23 +26,13 @@ public class RegistrationService /* implements UserDetailsService */ {
 
 	public User login(Login loginDetails) {
 		User user = registration.findByUsername(loginDetails.getUsername());
-		System.out.println(loginDetails.getUsername());
-		System.out.println(user);
 		if (user == null) {
 			throw new RuntimeException("User does not exist.");
 		}
 		if (!user.getPassword().equals(loginDetails.getPassword())) {
 			throw new RuntimeException("Password mismatch.");
 		}
-		/*user = new User();
-		user.setUserId(1);
-		user.setUsername("David08");
-		user.setFirstName("David");
-		user.setLastName("Raj");
-		user.setPhoneNumber("9876543210");
-		user.setExperience("10>");
-		user.setNoticePeriod("90");
-		user.setEmail("abc@gmail.com");*/
+		
 		return user;
 	}
 

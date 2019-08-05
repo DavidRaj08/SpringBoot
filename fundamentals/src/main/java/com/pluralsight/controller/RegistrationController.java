@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.pluralsight.config.Constants;
 import com.pluralsight.entities.Login;
 import com.pluralsight.entities.User;
 import com.pluralsight.repositorities.RegistrationRepository;
@@ -46,55 +46,75 @@ public class RegistrationController {
 
 	@GetMapping("/home")
 	public String home() {
-		return "home";
+		return Constants.HOME;
 	}
 
 	@GetMapping("/register")
 	public String registerUser(Model model, User user) {
-		model.addAttribute("register", new User());
-		return "register";
+		model.addAttribute(Constants.REGISTER, new User());
+		return Constants.REGISTER;
 	}
 
 	@PostMapping("/register")
 	public String welcomeUser(@ModelAttribute User user, @RequestParam("file") MultipartFile file, BindingResult result,
 			RedirectAttributes redirectAttributes) {
-		if (file.isEmpty()) {
-			redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-			return "redirect:uploadStatus";
-		}
+		if (user != null) {
 
-		if (result.hasErrors()) {
-			return "register";
-		}
+			if (file.isEmpty()) {
+				redirectAttributes.addFlashAttribute("message", Constants.UPLOAD_FILE);
+				return "redirect:uploadStatus";
+			}
+			registration.save(user);
 
-		registration.save(user);
-		if (user.getUserId() != 0) {
-			user.setMessage("User created successfully");
-		}
+			if (result.hasErrors()) {
+				System.out.println("Error---->" + result.getFieldError());
+				return Constants.REGISTER;
 
-		return "welcome";
+			} else {
+				if (user.getUserId() != 0) {
+					user.setMessage(Constants.USER_CREATED);
+				}
+
+				return Constants.WELCOME;
+			}
+		} else {
+			return Constants.REGISTER;
+		}
 	}
 
 	@GetMapping("/login")
 	public String loginPage(Model model, Login login) {
-		model.addAttribute("login", new Login());
-		return "login";
+		model.addAttribute(Constants.LOGIN, new Login());
+		return Constants.LOGIN;
 	}
 
 	@PostMapping("/login")
-	public String login(@ModelAttribute Login loginDetails, Model model) {
-		User user = service.login(loginDetails);
+	public String login(@ModelAttribute Login loginDetails, Model model, BindingResult result) {
+		User user = registration.findByUsername(loginDetails.getUsername());
+		if (user == null) {
+			loginDetails.setMessage(Constants.INVALID_USERNAME);
+			model.addAttribute(Constants.LOGIN);
+			return Constants.LOGIN;
+		}
+		user.setMessage(Constants.LOGIN_SUCCESSFULL);
 		model.addAttribute(user);
-		return "welcome";
+		return Constants.WELCOME;
 	}
 
 	@GetMapping("/edit/{userId}")
 	public String saveUser(@PathVariable("userId") long userId, Model model, @ModelAttribute User user) {
-		// user = service.get(userId);
-		user = registration.findById(userId).get();
+		try {
+			user = registration.findById(userId).get();
+		} catch (Exception e) {
+			Login login = new Login();
+			login.setMessage(Constants.INVALID_USERNAME);
+			model.addAttribute(Constants.LOGIN, login);
+			return Constants.LOGIN;
+
+		}
 		password = user.getPassword();
 		model.addAttribute(user);
-		return "edit";
+		return Constants.EDIT;
 	}
 
 	@PostMapping("/edit/{userId}")
@@ -102,15 +122,15 @@ public class RegistrationController {
 			BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			user.setUserId(userId);
-			return "edit";
+			return Constants.EDIT;
 		}
 		user.setPassword(password);
-		user.setMessage("User details updated successfully");
+		user.setMessage(Constants.USER_UPDATED);
 		registration.save(user);
-		return "welcome";
+		return Constants.WELCOME;
 	}
 
-	@RequestMapping(value = "/showResume", method = RequestMethod.GET)
+	@GetMapping(value = "/showResume")
 	public ResponseEntity<byte[]> getPDF1() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/pdf"));
@@ -121,6 +141,30 @@ public class RegistrationController {
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(headers, HttpStatus.OK);
 		return response;
+	}
+
+	@GetMapping("/resetPassword")
+	public String resetPassword(Model model, Login login) {
+		// user = registration.findByUsername(username);
+		model.addAttribute(Constants.PASSWORD_RESET, new Login());
+		return Constants.PASSWORD_RESET;
+	}
+
+	@PostMapping("/resetPassword")
+	public String updatePassword(@RequestParam("username") String username, @ModelAttribute Login login,
+			BindingResult result, Model model) {
+		User user = registration.findByUsername(username);
+		if (user == null) {
+			login.setMessage(Constants.INVALID_USERNAME);
+			return Constants.PASSWORD_RESET;
+		} else if (!(login.getPassword().equals(login.getReEnterPassword()))) {
+			login.setMessage(Constants.INVALID_USERNAME);
+			return Constants.PASSWORD_RESET;
+		} else {
+			user.setPassword(login.getPassword());
+		}
+		registration.save(user);
+		return Constants.HOME;
 	}
 
 	@ModelAttribute("expDropdownValues")

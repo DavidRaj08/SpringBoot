@@ -11,35 +11,39 @@
 <title>Welcome</title>
 </head>
 <body>
-	<div class="alert alert-success" align="center" th:if="${user.userId != null}">
+	<div class="alert alert-success" align="center"
+		th:if="${user.userId != null}">
 		<span th:text="${user.message}"> </span>
 	</div>
 	<div align="center">
 		<h1>Welcome Page</h1>
+		<div align="right">
+			<a th:href="'/logout'"><button class="logoutStyle">Logout</button></a>
+		</div>
 		<hr />
 		<table>
 			<tr>
-				<td align="left" style="height: 52px; width: 202px;">User Id</td>
+				<td align="left" style="height: 37px; width: 180px;">User Id</td>
 				<td th:text="${user.userId}"></td>
 			</tr>
 			<tr>
-				<td>User Name</td>
+				<td style="height: 37px; width: 180px;">User Name</td>
 				<td th:text="${user.username}"></td>
 			</tr>
 			<tr>
-				<td>First Name</td>
+				<td style="height: 37px; width: 180px;">First Name</td>
 				<td th:text="${user.firstName}"></td>
 			</tr>
 			<tr>
-				<td>Last Name</td>
+				<td style="height: 37px; width: 180px;">Last Name</td>
 				<td th:text="${user.lastName}"></td>
 			</tr>
 			<tr>
-				<td>Email</td>
+				<td style="height: 37px; width: 180px;">Email</td>
 				<td th:text="${user.email}"></td>
 			</tr>
 			<tr>
-				<td>Phone Number</td>
+				<td style="height: 37px; width: 180px;">Phone Number</td>
 				<td th:text="${user.phoneNumber}"></td>
 			</tr>
 			<tr>
@@ -47,11 +51,9 @@
 				<td th:text="${user.experience}"></td>
 			</tr>
 			<tr>
-				<td>Notice Period</td>
+				<td style="height: 37px; width: 180px;">Notice Period</td>
 				<td th:text="${user.noticePeriod}"></td>
 			</tr>
-
-
 
 		</table>
 		<div align="center">

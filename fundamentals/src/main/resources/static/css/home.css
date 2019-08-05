@@ -32,6 +32,17 @@ div {
 	width: 80%;
 }
 
+
+.logoutStyle {
+	background-color: #4CAF50;
+	color: white;
+	padding: 9px 12px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	
+}
+
 .reset {
 	background-color: #c0c0c0;
 	color: white;
