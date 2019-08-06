@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.pluralsight.config.Constants;
 import com.pluralsight.entities.Login;
 import com.pluralsight.entities.User;
+import com.pluralsight.exception.RegistrationException;
 import com.pluralsight.repositorities.RegistrationRepository;
 import com.pluralsight.service.RegistrationService;
 
@@ -56,30 +57,36 @@ public class RegistrationController {
 	}
 
 	@PostMapping("/register")
-	public String welcomeUser(@ModelAttribute User user, @RequestParam("file") MultipartFile file, BindingResult result,
-			RedirectAttributes redirectAttributes) {
-		if (user != null) {
+	public ModelAndView welcomeUser(@Valid @ModelAttribute User user, @RequestParam("file") MultipartFile file,
+			BindingResult result, ModelAndView model) throws RegistrationException {
 
-			if (file.isEmpty()) {
-				redirectAttributes.addFlashAttribute("message", Constants.UPLOAD_FILE);
-				return "redirect:uploadStatus";
-			}
-			registration.save(user);
-
-			if (result.hasErrors()) {
-				System.out.println("Error---->" + result.getFieldError());
-				return Constants.REGISTER;
-
-			} else {
-				if (user.getUserId() != 0) {
-					user.setMessage(Constants.USER_CREATED);
-				}
-
-				return Constants.WELCOME;
-			}
-		} else {
-			return Constants.REGISTER;
+		/*
+		 * To check if username or email already exists
+		 */
+		User userExists = service.findByEmail(user.getEmail());
+		if (userExists != null) {
+			result.rejectValue("email", "error.user", Constants.USER_EXISTS);
+			user = new User();
+			user.setMessage(Constants.USER_EXISTS);
+			result.reject(user.getEmail());
+			model.addObject(user);
+			model.setViewName(Constants.REGISTER);
 		}
+
+		if (file.isEmpty()) {
+			user.setMessage(Constants.NO_FILE_UPLOADED);
+			model.addObject(user);
+			model.setViewName(Constants.REGISTER);
+		}
+		if (result.hasErrors()) {
+			model.setViewName(Constants.REGISTER);
+		} else {
+			registration.save(user);
+			user.setMessage(Constants.USER_CREATED);
+			model.setViewName(Constants.WELCOME);
+		}
+
+		return model;
 	}
 
 	@GetMapping("/login")
@@ -110,7 +117,6 @@ public class RegistrationController {
 			login.setMessage(Constants.INVALID_USERNAME);
 			model.addAttribute(Constants.LOGIN, login);
 			return Constants.LOGIN;
-
 		}
 		password = user.getPassword();
 		model.addAttribute(user);
@@ -127,6 +133,11 @@ public class RegistrationController {
 		user.setPassword(password);
 		user.setMessage(Constants.USER_UPDATED);
 		registration.save(user);
+		return Constants.WELCOME;
+	}
+
+	@RequestMapping("/welcome")
+	public String welcome() {
 		return Constants.WELCOME;
 	}
 
@@ -158,7 +169,7 @@ public class RegistrationController {
 			login.setMessage(Constants.INVALID_USERNAME);
 			return Constants.PASSWORD_RESET;
 		} else if (!(login.getPassword().equals(login.getReEnterPassword()))) {
-			login.setMessage(Constants.INVALID_USERNAME);
+			login.setMessage(Constants.PASSWORD_MISMATCH);
 			return Constants.PASSWORD_RESET;
 		} else {
 			user.setPassword(login.getPassword());

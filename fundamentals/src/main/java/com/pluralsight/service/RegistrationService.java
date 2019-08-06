@@ -32,8 +32,12 @@ public class RegistrationService /* implements UserDetailsService */ {
 		if (!user.getPassword().equals(loginDetails.getPassword())) {
 			throw new RuntimeException("Password mismatch.");
 		}
-		
+
 		return user;
+	}
+
+	public User findByEmail(String email) {
+		return registration.findByEmail(email);
 	}
 
 }

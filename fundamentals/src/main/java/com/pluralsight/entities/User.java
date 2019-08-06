@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.web.multipart.MultipartFile;
+
 
 @Entity
 public class User {
@@ -20,27 +22,37 @@ public class User {
 	@Column(name = "user_id")
 	private long userId;
 
+	@NotEmpty(message = "*Please provide Username")
 	private String username;
+	
+	@NotEmpty(message = "*Please provide password")
 	private String password;
 
 	@Column(name = "first_name")
+	@NotEmpty(message = "*Please provide First Name")
 	private String firstName;
 
 	@Column(name = "last_name")
+	@NotEmpty(message = "*Please provide Last Name")
 	private String lastName;
 
-	@Email
+	@Email(message = "*Please enter a valid Email")
+	@NotEmpty(message = "*Please provide an Email")
 	private String email;
 
 	@Column(name = "phone_number")
+	@NotEmpty(message = "*Please provide Phone Number")
 	private String phoneNumber;
 
+	@NotEmpty(message = "*Please provide experience")
 	private String experience;
 
+	@NotEmpty(message = "*Please provide notice period")
 	@Column(name = "notice_period")
 	private String noticePeriod;
 
 	@Transient
+	@NotEmpty(message = "*Please upload a file")
 	private MultipartFile[] file;
 
 	@Transient

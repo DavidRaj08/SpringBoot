@@ -17,4 +17,7 @@ public final class Constants {
 	public static final String EDIT = "edit";
 	public static final String LOGIN = "login";
 	public static final String LOGIN_SUCCESSFULL = "Login Successfull";
+	public static final String PASSWORD_MISMATCH = "Entered passwords do not match";
+	public static final String USER_EXISTS = "User with the email id already exists";
+	public static final String NO_FILE_UPLOADED = "No file is uploaded. Please upload a file";
 }

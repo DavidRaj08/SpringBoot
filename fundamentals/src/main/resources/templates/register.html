@@ -12,7 +12,10 @@
 	<div align="center">
 		<h1>Form</h1>
 		<hr />
-
+<div class="alert alert-danger" align="center"
+		th:if="${user.message != null}">
+		<span th:text="${user.message}"> </span>
+</div>
 		<form action="#" th:action="@{/register}" th:object="${user}"
 			method="post" enctype="multipart/form-data">
 			<table>

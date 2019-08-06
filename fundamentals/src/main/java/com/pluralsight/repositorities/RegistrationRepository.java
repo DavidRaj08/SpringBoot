@@ -10,9 +10,6 @@ public interface RegistrationRepository extends CrudRepository<User, Long> {
 
 	User findByUsername(String username);
 
-	//User findUserByEmail(String string);
+	User findByEmail(String email);
 
-	//User registerUser(User user);
-
-	
 }
