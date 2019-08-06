@@ -13,7 +13,6 @@ import javax.validation.constraints.NotEmpty;
 
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Entity
 public class User {
 
@@ -24,8 +23,8 @@ public class User {
 
 	@NotEmpty(message = "*Please provide Username")
 	private String username;
+
 	
-	@NotEmpty(message = "*Please provide password")
 	private String password;
 
 	@Column(name = "first_name")
@@ -52,8 +51,9 @@ public class User {
 	private String noticePeriod;
 
 	@Transient
-	@NotEmpty(message = "*Please upload a file")
 	private MultipartFile[] file;
+
+	private String fileLocation;
 
 	@Transient
 	private String message;
@@ -138,6 +138,14 @@ public class User {
 		this.file = file;
 	}
 
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
+	}
+
 	public String getMessage() {
 		return message;
 	}
@@ -146,31 +154,12 @@ public class User {
 		this.message = message;
 	}
 
-	public User(long userId, String username, String password, String firstName, String lastName, @Email String email,
-			String phoneNumber, String experience, String noticePeriod, MultipartFile[] file, String message) {
-		this.userId = userId;
-		this.username = username;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.experience = experience;
-		this.noticePeriod = noticePeriod;
-		this.file = file;
-		this.message = message;
-	}
-
-	public User() {
-
-	}
-
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", firstName="
 				+ firstName + ", lastName=" + lastName + ", email=" + email + ", phoneNumber=" + phoneNumber
 				+ ", experience=" + experience + ", noticePeriod=" + noticePeriod + ", file=" + Arrays.toString(file)
-				+ ", message=" + message + "]";
+				+ ", fileLocation=" + fileLocation + ", message=" + message + "]";
 	}
 
 }

@@ -1,5 +1,9 @@
 package com.pluralsight.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +33,7 @@ import com.pluralsight.service.RegistrationService;
 @Controller
 public class RegistrationController {
 
-	// private static String UPLOADED_FOLDER =
-	// "C:\\Users\\dsamband\\Documents\\ProjectFiles";
+	private static String UPLOADED_FOLDER = "C:\\Users\\dsamband\\Documents\\ProjectFiles";
 
 	@Autowired
 	RegistrationService service;
@@ -57,8 +60,9 @@ public class RegistrationController {
 	}
 
 	@PostMapping("/register")
-	public ModelAndView welcomeUser(@Valid @ModelAttribute User user, @RequestParam("file") MultipartFile file,
-			BindingResult result, ModelAndView model) throws RegistrationException {
+	public ModelAndView welcomeUser(@Valid @ModelAttribute(value = "user") User user,
+			@RequestParam("file") MultipartFile file, BindingResult result, ModelAndView model)
+			throws RegistrationException {
 
 		/*
 		 * To check if username or email already exists
@@ -66,21 +70,33 @@ public class RegistrationController {
 		User userExists = service.findByEmail(user.getEmail());
 		if (userExists != null) {
 			result.rejectValue("email", "error.user", Constants.USER_EXISTS);
-			user = new User();
-			user.setMessage(Constants.USER_EXISTS);
-			result.reject(user.getEmail());
+			// user = new User();
+			// user.setMessage(Constants.USER_EXISTS);
+			// result.reject(user.getEmail());
 			model.addObject(user);
 			model.setViewName(Constants.REGISTER);
 		}
 
-		if (file.isEmpty()) {
+		if (!file.isEmpty()) {
+			try {
+
+				byte[] bytes = file.getBytes();
+				Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+				Files.write(path, bytes);
+			} catch (Exception e) {
+				user.setMessage(Constants.FILE_UPLOAD_FAILED);
+				model.setViewName(Constants.REGISTER);
+			}
+		} else {
 			user.setMessage(Constants.NO_FILE_UPLOADED);
 			model.addObject(user);
 			model.setViewName(Constants.REGISTER);
 		}
+
 		if (result.hasErrors()) {
 			model.setViewName(Constants.REGISTER);
 		} else {
+			user.setFileLocation(UPLOADED_FOLDER + "\\" + file.getOriginalFilename());
 			registration.save(user);
 			user.setMessage(Constants.USER_CREATED);
 			model.setViewName(Constants.WELCOME);
@@ -96,10 +112,11 @@ public class RegistrationController {
 	}
 
 	@PostMapping("/login")
-	public String login(@ModelAttribute Login loginDetails, Model model, BindingResult result) {
-		User user = registration.findByUsername(loginDetails.getUsername());
-		if (user == null) {
-			loginDetails.setMessage(Constants.INVALID_USERNAME);
+	public String login(@ModelAttribute(value = "login") Login login, Model model, BindingResult result) {
+		User user = registration.findByUsername(login.getUsername());
+		if ((user == null) || !(login.getPassword().equals(user.getPassword()))) {
+			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
+			// login.setMessage(Constants.INVALID_USERNAME);
 			model.addAttribute(Constants.LOGIN);
 			return Constants.LOGIN;
 		}
@@ -142,10 +159,10 @@ public class RegistrationController {
 	}
 
 	@GetMapping(value = "/showResume")
-	public ResponseEntity<byte[]> getPDF1() {
+	public ResponseEntity<byte[]> downloadFile() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/pdf"));
-		String filename = "C:\\Users\\dsamband\\Documents\\Training_OOPS.pdf";
+		String filename = UPLOADED_FOLDER + "\\Training_OOPS.pdf";
 		headers.add("content-disposition", "inline;filename=" + filename);
 		filename = filename.substring(filename.lastIndexOf("\\") + 1);
 		headers.setContentDispositionFormData(filename, filename);
@@ -162,19 +179,22 @@ public class RegistrationController {
 	}
 
 	@PostMapping("/resetPassword")
-	public String updatePassword(@RequestParam("username") String username, @ModelAttribute Login login,
-			BindingResult result, Model model) {
+	public String updatePassword(@RequestParam("username") String username,
+			@ModelAttribute(value = "login") Login login, BindingResult result, Model model) {
 		User user = registration.findByUsername(username);
 		if (user == null) {
-			login.setMessage(Constants.INVALID_USERNAME);
+			// login.setMessage(Constants.INVALID_USERNAME);
+			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			return Constants.PASSWORD_RESET;
 		} else if (!(login.getPassword().equals(login.getReEnterPassword()))) {
-			login.setMessage(Constants.PASSWORD_MISMATCH);
+			// login.setMessage(Constants.PASSWORD_MISMATCH);
+			result.rejectValue("password", "error.user", Constants.PASSWORD_MISMATCH);
 			return Constants.PASSWORD_RESET;
 		} else {
 			user.setPassword(login.getPassword());
 		}
 		registration.save(user);
+		user = new User();
 		return Constants.HOME;
 	}
 

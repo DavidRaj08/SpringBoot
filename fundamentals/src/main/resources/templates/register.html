@@ -12,12 +12,18 @@
 	<div align="center">
 		<h1>Form</h1>
 		<hr />
-<div class="alert alert-danger" align="center"
-		th:if="${user.message != null}">
-		<span th:text="${user.message}"> </span>
-</div>
+		<!-- <div class="alert alert-danger" align="center"
+			th:if="${user.message != null}">
+			<span th:text="${user.message}"> </span>
+		</div> -->
+		
 		<form action="#" th:action="@{/register}" th:object="${user}"
 			method="post" enctype="multipart/form-data">
+			<div>
+				<span class="alert alert-danger" th:if="${#fields.hasErrors('*')}"
+					th:each="err : ${#fields.errors('*')}" th:text="${err}"></span>
+			</div>
+			<hr th:if="${#fields.hasErrors('*')}"/>
 			<table>
 				<tr>
 
@@ -40,8 +46,7 @@
 					<td><input type="text" th:field="*{firstName}"
 						th:required="required" placeholder="John" maxlength="50" />
 				<tr>
-					<td align="left" style="height: 37px; width: 180px;">Last
-						Name</td>
+					<td align="left" style="height: 37px; width: 180px;">Last Name</td>
 
 					<td><input type="text" th:field="*{lastName}"
 						th:required="required" placeholder="Doe" maxlength="50" />

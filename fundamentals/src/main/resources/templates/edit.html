@@ -14,6 +14,9 @@
 	<div align="center">
 		<h1>Edit User Form</h1>
 		<hr />
+		<div align="right">
+			<a th:href="'/resetPassword'"><button class="logoutStyle">Reset Password</button></a>
+		</div>
 
 		<form th:action="@{'/edit/' + ${userId}}" th:object="${user}"
 			method="post" enctype="multipart/form-data">
@@ -30,12 +33,12 @@
 					<td><input type="text" th:field="${user.username}"
 						th:required="required" maxlength="20" /></td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td align="left" style="height: 37px; width: 180px;">Password</td>
 
 					<td><input type="password" th:field="${user.password}"
 						readonly="readonly" min="8"></td>
-				</tr>
+				</tr> -->
 				<tr>
 					<td align="left" style="height: 37px; width: 180px;">First
 						Name</td>

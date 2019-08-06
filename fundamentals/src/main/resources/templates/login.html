@@ -9,15 +9,30 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<div class="alert alert-danger" align="center" th:if="${login.message != null}">
+
+	<!-- <div class="alert alert-danger" align="center"
+		th:if="${login.message != null}">
 		<span th:text="${login.message}"> </span>
-	</div>
+	</div> -->
+	<!-- 
+	<ul>
+		<li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
+	</ul> -->
+
+	<!-- <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}"> -->
+
+	<!-- </div> -->
 	<div align="center">
 		<h1>Form</h1>
 		<hr />
 
 		<form action="#" th:action="@{/login}" th:object="${login}"
 			method="post">
+			<div>
+				<span class="alert alert-danger" th:if="${#fields.hasErrors('*')}"
+					th:each="err : ${#fields.errors('*')}" th:text="${err}"></span>
+			</div>
+			<hr th:if="${#fields.hasErrors('*')}"/>
 			<table>
 				<tr>
 					<td align="left">User Name</td>
@@ -36,10 +51,8 @@
 			<div>
 				<table>
 					<tr>
-						<td><input type="submit" value="Submit"
-							class="buttonStyle" /></td>
-						<td><input type="reset" value="Reset"
-							class="reset" /></td>
+						<td><input type="submit" value="Submit" class="buttonStyle" /></td>
+						<td><input type="reset" value="Reset" class="reset" /></td>
 					</tr>
 				</table>
 			</div>
