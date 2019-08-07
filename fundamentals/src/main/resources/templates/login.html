@@ -23,16 +23,23 @@
 
 	<!-- </div> -->
 	<div align="center">
-		<h1>Form</h1>
+		<h1>Login</h1>
 		<hr />
-
+		<div align="right">
+			<table>
+				<tr>
+					<td><a th:href="'/resetPassword'"><button
+								class="logoutStyle">Reset Password</button></a></td>
+				</tr>
+			</table>
+		</div>
 		<form action="#" th:action="@{/login}" th:object="${login}"
 			method="post">
 			<div>
 				<span class="alert alert-danger" th:if="${#fields.hasErrors('*')}"
 					th:each="err : ${#fields.errors('*')}" th:text="${err}"></span>
 			</div>
-			<hr th:if="${#fields.hasErrors('*')}"/>
+			<hr th:if="${#fields.hasErrors('*')}" />
 			<table>
 				<tr>
 					<td align="left">User Name</td>

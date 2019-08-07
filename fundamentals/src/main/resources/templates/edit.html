@@ -12,16 +12,27 @@
 <body>
 
 	<div align="center">
-		<h1>Edit User Form</h1>
+		<h1>Edit User Details</h1>
 		<hr />
 		<div align="right">
-			<a th:href="'/resetPassword'"><button class="logoutStyle">Reset Password</button></a>
+			<table>
+				<tr>
+					<td><a th:href="'/resetPassword'"><button
+								class="logoutStyle">Reset Password</button></a></td>
+					<td><a th:href="'/logout'"><button class="logoutStyle">Logout</button></a></td>
+				</tr>
+			</table>
 		</div>
 
 		<form th:action="@{'/edit/' + ${userId}}" th:object="${user}"
 			method="post" enctype="multipart/form-data">
+			<div>
+				<span class="alert alert-danger" th:if="${#fields.hasErrors('*')}"
+					th:each="err : ${#fields.errors('*')}" th:text="${err}"></span>
+			</div>
+			<hr th:if="${#fields.hasErrors('*')}" />
 			<table>
-				<tr>
+				<tr hidden="true">
 					<td align="left" style="height: 37px; width: 180px;">User Id</td>
 
 					<td><input type="text" th:field="${user.userId}"
@@ -31,7 +42,7 @@
 					<td align="left" style="height: 37px; width: 180px;">User Name</td>
 
 					<td><input type="text" th:field="${user.username}"
-						th:required="required" maxlength="20" /></td>
+						th:required="required" maxlength="20" readonly="readonly" /></td>
 				</tr>
 				<!-- <tr>
 					<td align="left" style="height: 37px; width: 180px;">Password</td>
@@ -97,19 +108,18 @@
 					<tr>
 						<td><input type="submit" value="Submit" class="buttonStyle" /></td>
 						<td><input type="reset" value="Reset" class="reset" /></td>
-						<td><button class="buttonStyle"
-								onclick="window.history.go(-1); return false;">Back</button></td>
+
 					</tr>
 				</table>
 			</div>
-
-
 		</form>
-	</div>
-	<div align="center">
+		<hr />
 		<table>
 			<tr>
-				<td><a th:href="'/showResume'"><button class="buttonStyle">Download</button></a></td>
+				<td><a th:href="'/welcome/' + ${user.userId}"><button
+							class="buttonStyle">Back</button></a></td>
+				<td><a th:href="'/showResume'"><button class="buttonStyle">Download
+							File</button></a></td>
 			</tr>
 		</table>
 	</div>

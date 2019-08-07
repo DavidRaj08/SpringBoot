@@ -10,28 +10,38 @@
 </head>
 <body>
 	<div align="center">
-		<h1>Form</h1>
+		<h1>Register</h1>
 		<hr />
 		<!-- <div class="alert alert-danger" align="center"
 			th:if="${user.message != null}">
 			<span th:text="${user.message}"> </span>
 		</div> -->
-		
+		<div align="right">
+			<table>
+				<tr>
+					<td><a th:href="'/login'"><button class="logoutStyle">Login</button></a>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<form action="#" th:action="@{/register}" th:object="${user}"
 			method="post" enctype="multipart/form-data">
 			<div>
 				<span class="alert alert-danger" th:if="${#fields.hasErrors('*')}"
 					th:each="err : ${#fields.errors('*')}" th:text="${err}"></span>
 			</div>
-			<hr th:if="${#fields.hasErrors('*')}"/>
+			<hr th:if="${#fields.hasErrors('*')}" />
 			<table>
 				<tr>
-
-					<td align="left" style="height: 37px; width: 180px;">User Name</td>
-
-
-					<td><input type="text" th:field="*{username}"
-						th:required="required" maxlength="20"
+					<td style="height: 37px; width: 180px;" class="info"><span>User
+							Name once created</span></td>
+					<td class="info"><span>cannot be changed</span></td>
+				</tr>
+				<tr>
+					<td align="left" style="height: 37px; width: 180px;">User Name
+					</td>
+					<td style="height: 37px; width: 180px;"><input type="text"
+						th:field="*{username}" th:required="required" maxlength="20"
 						placeholder="Enter your username" /></td>
 				</tr>
 				<tr>
@@ -85,14 +95,12 @@
 					<td><input type="file" th:field="*{file}"
 						th:required="required" /></td>
 				</tr>
-
 			</table>
 			<div align="center">
 				<table>
 					<tr>
 						<td align="left" style="padding-right: 10px;"><input
 							type="submit" value="Submit" class="buttonStyle" /></td>
-
 						<td><input type="reset" value="Reset" class="reset" /></td>
 					</tr>
 				</table>

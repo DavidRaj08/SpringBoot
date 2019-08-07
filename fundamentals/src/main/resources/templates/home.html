@@ -9,12 +9,20 @@
 <title>Home</title>
 </head>
 <body>
+	<div class="alert alert-success" align="center"
+		th:if="${login.message != null}">
+		<span th:text="${login.message}"> </span>
+	</div>
 	<div align="center">
-	<h3>Home</h3>
+		<h1>Home</h1>
+		<hr />
+
 		<table>
 			<tr>
-				<td><button class="buttonStyle" onclick="window.location.href='register'">Register</button></td>
-				<td><button class="buttonStyle" onclick="window.location.href='login'">Login</button></td>
+				<td><button class="buttonStyle"
+						onclick="window.location.href='register'">Register</button></td>
+				<td><button class="buttonStyle"
+						onclick="window.location.href='login'">Login</button></td>
 			</tr>
 		</table>
 	</div>

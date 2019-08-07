@@ -68,15 +68,16 @@ public class RegistrationController {
 		 * To check if username or email already exists
 		 */
 		User userExists = service.findByEmail(user.getEmail());
+		User usernameCheck = registration.findByUsername(user.getUsername());
+
 		if (userExists != null) {
-			result.rejectValue("email", "error.user", Constants.USER_EXISTS);
-			// user = new User();
-			// user.setMessage(Constants.USER_EXISTS);
-			// result.reject(user.getEmail());
+			result.rejectValue("email", "error.user", Constants.EMAILID_EXISTS);
 			model.addObject(user);
 			model.setViewName(Constants.REGISTER);
 		}
-
+		if (usernameCheck != null) {
+			result.rejectValue("username", "error.user", Constants.USER_EXISTS);
+		}
 		if (!file.isEmpty()) {
 			try {
 
@@ -116,7 +117,6 @@ public class RegistrationController {
 		User user = registration.findByUsername(login.getUsername());
 		if ((user == null) || !(login.getPassword().equals(user.getPassword()))) {
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
-			// login.setMessage(Constants.INVALID_USERNAME);
 			model.addAttribute(Constants.LOGIN);
 			return Constants.LOGIN;
 		}
@@ -144,6 +144,7 @@ public class RegistrationController {
 	public String updateUser(@PathVariable("userId") long userId, @Valid @ModelAttribute User user,
 			BindingResult result, Model model) {
 		if (result.hasErrors()) {
+			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			user.setUserId(userId);
 			return Constants.EDIT;
 		}
@@ -153,8 +154,11 @@ public class RegistrationController {
 		return Constants.WELCOME;
 	}
 
-	@RequestMapping("/welcome")
-	public String welcome() {
+	@RequestMapping("/welcome/{userId}")
+	public String welcome(@PathVariable long userId, @ModelAttribute User user, Model model) {
+		user = registration.findById(userId).get();
+		model.addAttribute(user);
+		user.setMessage(Constants.NO_DETAILS_UPDATED);
 		return Constants.WELCOME;
 	}
 
@@ -172,9 +176,8 @@ public class RegistrationController {
 	}
 
 	@GetMapping("/resetPassword")
-	public String resetPassword(Model model, Login login) {
-		// user = registration.findByUsername(username);
-		model.addAttribute(Constants.PASSWORD_RESET, new Login());
+	public String resetPassword(Model model, @ModelAttribute Login login) {
+		model.addAttribute(login);
 		return Constants.PASSWORD_RESET;
 	}
 
@@ -183,18 +186,16 @@ public class RegistrationController {
 			@ModelAttribute(value = "login") Login login, BindingResult result, Model model) {
 		User user = registration.findByUsername(username);
 		if (user == null) {
-			// login.setMessage(Constants.INVALID_USERNAME);
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			return Constants.PASSWORD_RESET;
 		} else if (!(login.getPassword().equals(login.getReEnterPassword()))) {
-			// login.setMessage(Constants.PASSWORD_MISMATCH);
 			result.rejectValue("password", "error.user", Constants.PASSWORD_MISMATCH);
 			return Constants.PASSWORD_RESET;
 		} else {
 			user.setPassword(login.getPassword());
 		}
 		registration.save(user);
-		user = new User();
+		login.setMessage(Constants.PASSWORD_UPDATED);
 		return Constants.HOME;
 	}
 

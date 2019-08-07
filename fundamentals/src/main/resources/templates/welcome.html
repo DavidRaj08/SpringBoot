@@ -11,19 +11,23 @@
 <title>Welcome</title>
 </head>
 <body>
-	<div class="alert alert-success" align="center"
-		th:if="${user.userId != null}">
+	<div th:if="${user.userId != null}" class="alert alert-success"
+		align="center">
 		<span th:text="${user.message}"> </span>
 	</div>
 	<div align="center">
-		<h1>Welcome Page</h1>
+		<h1>Welcome</h1>
 		<hr />
 		<div align="right">
-			<a th:href="'/logout'"><button class="logoutStyle">Logout</button></a>
+			<table>
+				<tr>
+					<td><a th:href="'/logout'"><button class="logoutStyle">Logout</button></a></td>
+				</tr>
+			</table>
 		</div>
 
 		<table>
-			<tr>
+			<tr hidden="true">
 				<td align="left" style="height: 37px; width: 180px;">User Id</td>
 				<td th:text="${user.userId}"></td>
 			</tr>

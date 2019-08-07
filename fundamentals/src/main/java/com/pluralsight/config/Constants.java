@@ -21,4 +21,7 @@ public final class Constants {
 	public static final String USER_EXISTS = "User with the email id already exists";
 	public static final String NO_FILE_UPLOADED = "No file is uploaded. Please upload a file";
 	public static final String FILE_UPLOAD_FAILED = "File upload has been failed";
+	public static final String EMAILID_EXISTS = "Email Id already exists. Try Login or reset password";
+	public static final String PASSWORD_UPDATED = "Password changed successfully. Please Login";
+	public static final String NO_DETAILS_UPDATED = "No details are updated";
 }
