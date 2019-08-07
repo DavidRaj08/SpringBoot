@@ -44,7 +44,7 @@ div {
 
 .reset {
 	background-color: #c0c0c0;
-	color: white;
+	color: #000000;
 	padding: 9px 12px;
 	margin: 8px 0;
 	border: none;
@@ -59,6 +59,6 @@ td {
 }
 
 .info {
-	color: #ff0000;
+	color: #ff8080;
 	font-style: italic;
 }
