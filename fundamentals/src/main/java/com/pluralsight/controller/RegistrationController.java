@@ -84,7 +84,7 @@ public class RegistrationController {
 	public ModelAndView welcomeUser(@Valid @ModelAttribute(value = "user") User user,
 			@RequestParam("file") MultipartFile file, BindingResult result, ModelAndView model)
 			throws RegistrationException {
-		logger.info(Constants.ENTRY  + getMethodName());
+		logger.info(Constants.ENTRY + getMethodName());
 
 		/*
 		 * To check if username or email already exists
@@ -92,48 +92,48 @@ public class RegistrationController {
 		logger.info(Constants.VERIFYING_EMAIL_ID + getMethodName());
 		User userExists = service.findByEmail(user.getEmail());
 		if (userExists != null) {
-			logger.error(Constants.EMAIL_ID_EXISTS + " - "  + getMethodName());
+			logger.error(Constants.EMAIL_ID_EXISTS + " - " + getMethodName());
 			result.rejectValue("email", "error.user", Constants.EMAIL_ID_EXISTS);
 			model.addObject(user);
 			model.setViewName(Constants.REGISTER);
 		}
 
-		logger.info(Constants.VERIFYING_USERNAME  + getMethodName());
+		logger.info(Constants.VERIFYING_USERNAME + getMethodName());
 		User usernameCheck = registration.findByUsername(user.getUsername());
 		if (usernameCheck != null) {
-			logger.error(Constants.USER_EXISTS + " - "  + getMethodName());
+			logger.error(Constants.USER_EXISTS + " - " + getMethodName());
 			result.rejectValue("username", "error.user", Constants.USER_EXISTS);
 		}
 		if (!file.isEmpty()) {
 			try {
-				logger.info(Constants.IS_FILE_EMPTY  + getMethodName());
+				logger.info(Constants.IS_FILE_EMPTY + getMethodName());
 				byte[] bytes = file.getBytes();
 				Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
 				Files.write(path, bytes);
 			} catch (Exception e) {
-				logger.error(Constants.FILE_UPLOAD_FAILED + " - "  + getMethodName());
+				logger.error(Constants.FILE_UPLOAD_FAILED + " - " + getMethodName());
 				user.setMessage(Constants.FILE_UPLOAD_FAILED);
 				model.setViewName(Constants.REGISTER);
 			}
 		} else {
-			logger.error(Constants.NO_FILE_UPLOADED + " - "  + getMethodName());
+			logger.error(Constants.NO_FILE_UPLOADED + " - " + getMethodName());
 			user.setMessage(Constants.NO_FILE_UPLOADED);
 			model.addObject(user);
 			model.setViewName(Constants.REGISTER);
 		}
 
-		logger.info(Constants.VALIDATING_FORM  + getMethodName());
+		logger.info(Constants.VALIDATING_FORM + getMethodName());
 		if (result.hasErrors()) {
-			logger.error(Constants.FORM_ERROR  + getMethodName());
+			logger.error(Constants.FORM_ERROR + getMethodName());
 			model.setViewName(Constants.REGISTER);
 		} else {
 			user.setFileLocation(UPLOADED_FOLDER + "\\" + file.getOriginalFilename());
 			registration.save(user);
 			user.setMessage(Constants.USER_CREATED);
 			model.setViewName(Constants.WELCOME);
-			logger.debug(Constants.USER_CREATED  + getMethodName());
+			logger.debug(Constants.USER_CREATED + getMethodName());
 		}
-		logger.info(Constants.EXIT  + getMethodName());
+		logger.info(Constants.EXIT + getMethodName());
 		return model;
 	}
 
@@ -156,21 +156,21 @@ public class RegistrationController {
 	 */
 	@PostMapping("/login")
 	public String login(@ModelAttribute(value = "login") Login login, Model model, BindingResult result) {
-		logger.info(Constants.ENTRY  + getMethodName());
+		logger.info(Constants.ENTRY + getMethodName());
 
 		logger.info(Constants.VERIFYING_USERNAME + getMethodName());
 		User user = registration.findByUsername(login.getUsername());
 		if ((user == null) || !(login.getPassword().equals(user.getPassword()))) {
-			logger.error(Constants.INVALID_USERNAME  + getMethodName());
+			logger.error(Constants.INVALID_USERNAME + getMethodName());
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			model.addAttribute(Constants.LOGIN);
 			return Constants.LOGIN;
 		}
 		user.setMessage(Constants.LOGIN_SUCCESSFULL);
 		model.addAttribute(user);
-		logger.info(Constants.LOGIN_SUCCESSFULL  + getMethodName());
+		logger.info(Constants.LOGIN_SUCCESSFULL + getMethodName());
 
-		logger.info(Constants.EXIT  + getMethodName());
+		logger.info(Constants.EXIT + getMethodName());
 		return Constants.WELCOME;
 	}
 
@@ -183,10 +183,10 @@ public class RegistrationController {
 	@GetMapping("/edit/{userId}")
 	public String updateUser(@PathVariable("userId") long userId, Model model, @ModelAttribute User user) {
 		try {
-			logger.info(Constants.VERIFYING_EMAIL_ID  + getMethodName());
+			logger.info(Constants.VERIFYING_EMAIL_ID + getMethodName());
 			user = registration.findById(userId).get();
 		} catch (Exception e) {
-			logger.error(Constants.USER_ID_DOESNOT_EXISTS  + getMethodName());
+			logger.error(Constants.USER_ID_DOESNOT_EXISTS + getMethodName());
 			Login login = new Login();
 			login.setMessage(Constants.INVALID_USERNAME);
 			model.addAttribute(Constants.LOGIN, login);
@@ -207,11 +207,11 @@ public class RegistrationController {
 	@PostMapping("/edit/{userId}")
 	public String saveUser(@PathVariable("userId") long userId, @Valid @ModelAttribute User user, BindingResult result,
 			Model model) {
-		logger.info(Constants.ENTRY  + getMethodName());
+		logger.info(Constants.ENTRY + getMethodName());
 
-		logger.info(Constants.VALIDATING_FORM  + getMethodName());
+		logger.info(Constants.VALIDATING_FORM + getMethodName());
 		if (result.hasErrors()) {
-			logger.error(Constants.FORM_ERROR  + getMethodName());
+			logger.error(Constants.FORM_ERROR + getMethodName());
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			user.setUserId(userId);
 			return Constants.EDIT;
@@ -219,9 +219,9 @@ public class RegistrationController {
 		user.setPassword(password);
 		user.setMessage(Constants.USER_UPDATED);
 		registration.save(user);
-		logger.debug(Constants.USER_UPDATED  + getMethodName());
+		logger.debug(Constants.USER_UPDATED + getMethodName());
 
-		logger.info(Constants.EXIT  + getMethodName());
+		logger.info(Constants.EXIT + getMethodName());
 		return Constants.WELCOME;
 	}
 
@@ -244,7 +244,7 @@ public class RegistrationController {
 	 */
 	@GetMapping(value = "/showResume")
 	public ResponseEntity<byte[]> downloadFile() {
-		logger.info(Constants.ENTRY  + getMethodName());
+		logger.info(Constants.ENTRY + getMethodName());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/pdf"));
 		String filename = UPLOADED_FOLDER + "\\Training_OOPS.pdf";
@@ -253,7 +253,7 @@ public class RegistrationController {
 		headers.setContentDispositionFormData(filename, filename);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(headers, HttpStatus.OK);
-		logger.info(Constants.EXIT  + getMethodName());
+		logger.info(Constants.EXIT + getMethodName());
 		return response;
 	}
 
@@ -278,16 +278,16 @@ public class RegistrationController {
 	@PostMapping("/resetPassword")
 	public String updatePassword(@RequestParam("username") String username,
 			@ModelAttribute(value = "login") Login login, BindingResult result, Model model) {
-		logger.info(Constants.ENTRY  + getMethodName());
+		logger.info(Constants.ENTRY + getMethodName());
 
-		logger.info(Constants.VERIFYING_USERNAME  + getMethodName());
+		logger.info(Constants.VERIFYING_USERNAME + getMethodName());
 		User user = registration.findByUsername(username);
 		if (user == null) {
-			logger.error(Constants.INVALID_USERNAME  + getMethodName());
+			logger.error(Constants.INVALID_USERNAME + getMethodName());
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			return Constants.PASSWORD_RESET;
 		} else if (!(login.getPassword().equals(login.getReEnterPassword()))) {
-			logger.error(Constants.PASSWORD_MISMATCH  + getMethodName());
+			logger.error(Constants.PASSWORD_MISMATCH + getMethodName());
 			result.rejectValue("password", "error.user", Constants.PASSWORD_MISMATCH);
 			return Constants.PASSWORD_RESET;
 		} else {
@@ -295,7 +295,7 @@ public class RegistrationController {
 		}
 		registration.save(user);
 		login.setMessage(Constants.PASSWORD_UPDATED);
-		logger.info(Constants.EXIT  + getMethodName());
+		logger.info(Constants.EXIT + getMethodName());
 		return Constants.HOME;
 	}
 
