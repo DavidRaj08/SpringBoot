@@ -32,6 +32,10 @@ import com.pluralsight.exception.RegistrationException;
 import com.pluralsight.repositorities.RegistrationRepository;
 import com.pluralsight.service.RegistrationService;
 
+/**
+ * @author dsamband
+ *
+ */
 @Controller
 public class RegistrationController {
 
@@ -57,102 +61,132 @@ public class RegistrationController {
 		return Constants.HOME;
 	}
 
+	/**
+	 * @param model
+	 * @param user
+	 * @return
+	 */
 	@GetMapping("/register")
 	public String registerUser(Model model, User user) {
 		model.addAttribute(Constants.REGISTER, new User());
 		return Constants.REGISTER;
 	}
 
+	/**
+	 * @param user
+	 * @param file
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws RegistrationException
+	 */
 	@PostMapping("/register")
 	public ModelAndView welcomeUser(@Valid @ModelAttribute(value = "user") User user,
 			@RequestParam("file") MultipartFile file, BindingResult result, ModelAndView model)
 			throws RegistrationException {
-		logger.info("ENTRY - PostMapping" + this.getClass().getSimpleName() + ".welcomeUser()");
+		logger.info(Constants.ENTRY  + getMethodName());
 
 		/*
 		 * To check if username or email already exists
 		 */
-		logger.info("Verifying the entered Email Id - " + this.getClass().getSimpleName());
+		logger.info(Constants.VERIFYING_EMAIL_ID + getMethodName());
 		User userExists = service.findByEmail(user.getEmail());
 		if (userExists != null) {
-			logger.error("Email Id already exists - " + this.getClass().getSimpleName() + ".welcomeUser()");
-			result.rejectValue("email", "error.user", Constants.EMAILID_EXISTS);
+			logger.error(Constants.EMAIL_ID_EXISTS + " - "  + getMethodName());
+			result.rejectValue("email", "error.user", Constants.EMAIL_ID_EXISTS);
 			model.addObject(user);
 			model.setViewName(Constants.REGISTER);
 		}
 
-		logger.info("Verifying the entered User Name - " + this.getClass().getSimpleName() + ".welcomeUser()");
+		logger.info(Constants.VERIFYING_USERNAME  + getMethodName());
 		User usernameCheck = registration.findByUsername(user.getUsername());
 		if (usernameCheck != null) {
-			logger.error("User Name already exists - " + this.getClass().getSimpleName() + ".welcomeUser()");
+			logger.error(Constants.USER_EXISTS + " - "  + getMethodName());
 			result.rejectValue("username", "error.user", Constants.USER_EXISTS);
 		}
 		if (!file.isEmpty()) {
 			try {
-				logger.info(
-						"Verifying if uploaded file is empty - " + this.getClass().getSimpleName() + ".welcomeUser()");
+				logger.info(Constants.IS_FILE_EMPTY  + getMethodName());
 				byte[] bytes = file.getBytes();
 				Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
 				Files.write(path, bytes);
 			} catch (Exception e) {
-				logger.error("File uploaded failed - " + this.getClass().getSimpleName() + ".welcomeUser()");
+				logger.error(Constants.FILE_UPLOAD_FAILED + " - "  + getMethodName());
 				user.setMessage(Constants.FILE_UPLOAD_FAILED);
 				model.setViewName(Constants.REGISTER);
 			}
 		} else {
-			logger.error("No File uploaded - " + this.getClass().getSimpleName() + ".welcomeUser()");
+			logger.error(Constants.NO_FILE_UPLOADED + " - "  + getMethodName());
 			user.setMessage(Constants.NO_FILE_UPLOADED);
 			model.addObject(user);
 			model.setViewName(Constants.REGISTER);
 		}
 
+		logger.info(Constants.VALIDATING_FORM  + getMethodName());
 		if (result.hasErrors()) {
-			logger.error("The form has errors - " + this.getClass().getSimpleName() + ".welcomeUser()");
+			logger.error(Constants.FORM_ERROR  + getMethodName());
 			model.setViewName(Constants.REGISTER);
 		} else {
 			user.setFileLocation(UPLOADED_FOLDER + "\\" + file.getOriginalFilename());
 			registration.save(user);
 			user.setMessage(Constants.USER_CREATED);
 			model.setViewName(Constants.WELCOME);
-			logger.debug(Constants.USER_CREATED + this.getClass().getSimpleName() + ".welcomeUser()");
+			logger.debug(Constants.USER_CREATED  + getMethodName());
 		}
-		logger.info("EXIT - PostMapping" + this.getClass().getSimpleName() + ".welcomeUser()");
+		logger.info(Constants.EXIT  + getMethodName());
 		return model;
 	}
 
+	/**
+	 * @param model
+	 * @param login
+	 * @return
+	 */
 	@GetMapping("/login")
 	public String loginPage(Model model, Login login) {
 		model.addAttribute(Constants.LOGIN, new Login());
 		return Constants.LOGIN;
 	}
 
+	/**
+	 * @param login
+	 * @param model
+	 * @param result
+	 * @return
+	 */
 	@PostMapping("/login")
 	public String login(@ModelAttribute(value = "login") Login login, Model model, BindingResult result) {
-		logger.info("ENTRY - PostMapping" + this.getClass().getSimpleName() + ".login()");
+		logger.info(Constants.ENTRY  + getMethodName());
 
-		logger.info("Validating entered User Name - " + this.getClass().getSimpleName() + ".login()");
+		logger.info(Constants.VERIFYING_USERNAME + getMethodName());
 		User user = registration.findByUsername(login.getUsername());
 		if ((user == null) || !(login.getPassword().equals(user.getPassword()))) {
-			logger.error(Constants.INVALID_USERNAME + this.getClass().getSimpleName() + ".login()");
+			logger.error(Constants.INVALID_USERNAME  + getMethodName());
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			model.addAttribute(Constants.LOGIN);
 			return Constants.LOGIN;
 		}
 		user.setMessage(Constants.LOGIN_SUCCESSFULL);
 		model.addAttribute(user);
-		logger.info(Constants.LOGIN_SUCCESSFULL + this.getClass().getSimpleName() + ".login()");
+		logger.info(Constants.LOGIN_SUCCESSFULL  + getMethodName());
 
-		logger.info("EXIT - PostMapping" + this.getClass().getSimpleName() + ".login()");
+		logger.info(Constants.EXIT  + getMethodName());
 		return Constants.WELCOME;
 	}
 
+	/**
+	 * @param userId
+	 * @param model
+	 * @param user
+	 * @return
+	 */
 	@GetMapping("/edit/{userId}")
 	public String updateUser(@PathVariable("userId") long userId, Model model, @ModelAttribute User user) {
 		try {
-			logger.info("Validating if User Id exists - " + this.getClass().getSimpleName() + ".updateUser()");
+			logger.info(Constants.VERIFYING_EMAIL_ID  + getMethodName());
 			user = registration.findById(userId).get();
 		} catch (Exception e) {
-			logger.error("User Id does not exists - " + this.getClass().getSimpleName() + ".updateUser()");
+			logger.error(Constants.USER_ID_DOESNOT_EXISTS  + getMethodName());
 			Login login = new Login();
 			login.setMessage(Constants.INVALID_USERNAME);
 			model.addAttribute(Constants.LOGIN, login);
@@ -163,14 +197,21 @@ public class RegistrationController {
 		return Constants.EDIT;
 	}
 
+	/**
+	 * @param userId
+	 * @param user
+	 * @param result
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/edit/{userId}")
 	public String saveUser(@PathVariable("userId") long userId, @Valid @ModelAttribute User user, BindingResult result,
 			Model model) {
-		logger.info("ENTRY - PostMapping" + this.getClass().getSimpleName() + ".saveUser()");
+		logger.info(Constants.ENTRY  + getMethodName());
 
-		logger.info("Validating if form has errors - " + this.getClass().getSimpleName() + ".saveUser()");
+		logger.info(Constants.VALIDATING_FORM  + getMethodName());
 		if (result.hasErrors()) {
-			logger.error("Form contains erros - " + this.getClass().getSimpleName() + ".saveUser()");
+			logger.error(Constants.FORM_ERROR  + getMethodName());
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			user.setUserId(userId);
 			return Constants.EDIT;
@@ -178,12 +219,18 @@ public class RegistrationController {
 		user.setPassword(password);
 		user.setMessage(Constants.USER_UPDATED);
 		registration.save(user);
-		logger.debug(Constants.USER_UPDATED + this.getClass().getSimpleName() + ".saveUser()");
+		logger.debug(Constants.USER_UPDATED  + getMethodName());
 
-		logger.info("EXIT - PostMapping" + this.getClass().getSimpleName() + ".saveUser()");
+		logger.info(Constants.EXIT  + getMethodName());
 		return Constants.WELCOME;
 	}
 
+	/**
+	 * @param userId
+	 * @param user
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/welcome/{userId}")
 	public String welcome(@PathVariable long userId, @ModelAttribute User user, Model model) {
 		user = registration.findById(userId).get();
@@ -192,9 +239,12 @@ public class RegistrationController {
 		return Constants.WELCOME;
 	}
 
+	/**
+	 * @return
+	 */
 	@GetMapping(value = "/showResume")
 	public ResponseEntity<byte[]> downloadFile() {
-		logger.info("ENTRY - " + this.getClass().getSimpleName() + ".downloadFile()");
+		logger.info(Constants.ENTRY  + getMethodName());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType("application/pdf"));
 		String filename = UPLOADED_FOLDER + "\\Training_OOPS.pdf";
@@ -203,29 +253,41 @@ public class RegistrationController {
 		headers.setContentDispositionFormData(filename, filename);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(headers, HttpStatus.OK);
-		logger.info("EXIT - " + this.getClass().getSimpleName() + ".downloadFile()");
+		logger.info(Constants.EXIT  + getMethodName());
 		return response;
 	}
 
+	/**
+	 * @param model
+	 * @param login
+	 * @return
+	 */
 	@GetMapping("/resetPassword")
 	public String resetPassword(Model model, @ModelAttribute Login login) {
 		model.addAttribute(login);
 		return Constants.PASSWORD_RESET;
 	}
 
+	/**
+	 * @param username
+	 * @param login
+	 * @param result
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/resetPassword")
 	public String updatePassword(@RequestParam("username") String username,
 			@ModelAttribute(value = "login") Login login, BindingResult result, Model model) {
-		logger.info("ENTRY - PostMapping" + this.getClass().getSimpleName() + ".updatePassword()");
+		logger.info(Constants.ENTRY  + getMethodName());
 
-		logger.info("Validating entered User Name - " + this.getClass().getSimpleName() + ".updatePassword()");
+		logger.info(Constants.VERIFYING_USERNAME  + getMethodName());
 		User user = registration.findByUsername(username);
 		if (user == null) {
-			logger.error(Constants.INVALID_USERNAME + this.getClass().getSimpleName() + ".saveUser()");
+			logger.error(Constants.INVALID_USERNAME  + getMethodName());
 			result.rejectValue("username", "error.user", Constants.INVALID_USERNAME);
 			return Constants.PASSWORD_RESET;
 		} else if (!(login.getPassword().equals(login.getReEnterPassword()))) {
-			logger.error(Constants.PASSWORD_MISMATCH + this.getClass().getSimpleName() + ".saveUser()");
+			logger.error(Constants.PASSWORD_MISMATCH  + getMethodName());
 			result.rejectValue("password", "error.user", Constants.PASSWORD_MISMATCH);
 			return Constants.PASSWORD_RESET;
 		} else {
@@ -233,7 +295,7 @@ public class RegistrationController {
 		}
 		registration.save(user);
 		login.setMessage(Constants.PASSWORD_UPDATED);
-		logger.info("EXIT - PostMapping" + this.getClass().getSimpleName() + ".updatePassword()");
+		logger.info(Constants.EXIT  + getMethodName());
 		return Constants.HOME;
 	}
 
@@ -247,4 +309,9 @@ public class RegistrationController {
 		return new String[] { "0-15", "15-30", "30-60", "90" };
 	}
 
+	public String getMethodName() {
+		String method = this.getClass().getSimpleName() + "."
+				+ Thread.currentThread().getStackTrace()[2].getMethodName() + "()";
+		return method;
+	}
 }
