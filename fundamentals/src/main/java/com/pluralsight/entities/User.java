@@ -13,6 +13,8 @@ import javax.validation.constraints.NotEmpty;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class User {
 
@@ -51,6 +53,7 @@ public class User {
 	private String noticePeriod;
 
 	@Transient
+	@JsonIgnore
 	private MultipartFile[] file;
 
 	private String fileLocation;

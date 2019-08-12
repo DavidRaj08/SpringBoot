@@ -11,9 +11,11 @@
 <title>Welcome</title>
 </head>
 <body>
-	<div th:if="${user.userId != null}" class="alert alert-success"
-		align="center">
-		<span th:text="${user.message}"> </span>
+	<div th:if="${user.message != null}">
+		<div th:if="${user.userId != null}" class="alert alert-success"
+			align="center">
+			<span th:text="${user.message}"> </span>
+		</div>
 	</div>
 	<div align="center">
 		<h1>Welcome</h1>

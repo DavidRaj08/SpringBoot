@@ -6,6 +6,7 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"
 	href="../static/css/home.css"></link>
+
 <title>Edit User</title>
 </head>
 
@@ -99,6 +100,7 @@
 						file</td>
 
 					<td><input type="file" th:field="*{file}" /></td>
+					<td th:field="${user.file}"></td>
 				</tr>
 
 			</table>
@@ -118,7 +120,7 @@
 			<tr>
 				<td><a th:href="'/welcome/' + ${user.userId}"><button
 							class="buttonStyle">Back</button></a></td>
-				<td><a th:href="'/showResume'"><button class="buttonStyle">Download
+				<td><a th:href="'/showResume/'+ ${userId}"><button class="buttonStyle">Download
 							File</button></a></td>
 			</tr>
 		</table>

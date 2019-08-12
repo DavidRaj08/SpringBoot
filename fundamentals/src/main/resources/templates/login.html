@@ -5,6 +5,7 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"
 	href="../static/css/home.css"></link>
+
 <title>Login Form</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
@@ -14,14 +15,7 @@
 		th:if="${login.message != null}">
 		<span th:text="${login.message}"> </span>
 	</div> -->
-	<!-- 
-	<ul>
-		<li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
-	</ul> -->
 
-	<!-- <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}"> -->
-
-	<!-- </div> -->
 	<div align="center">
 		<h1>Login</h1>
 		<hr />
@@ -30,16 +24,17 @@
 				<tr>
 					<td><a th:href="'/resetPassword'"><button
 								class="logoutStyle">Reset Password</button></a></td>
+					<td><a th:href="'/register'"><button class="logoutStyle">Register</button></a>
 				</tr>
 			</table>
 		</div>
 		<form action="#" th:action="@{/login}" th:object="${login}"
 			method="post">
-			<div>
+			<div th:if="${login != null}" >
 				<span class="alert alert-danger" th:if="${#fields.hasErrors('*')}"
 					th:each="err : ${#fields.errors('*')}" th:text="${err}"></span>
 			</div>
-			<hr th:if="${#fields.hasErrors('*')}" />
+			<hr />
 			<table>
 				<tr>
 					<td align="left">User Name</td>

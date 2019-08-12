@@ -9,9 +9,11 @@
 <title>Home</title>
 </head>
 <body>
-	<div class="alert alert-success" align="center"
-		th:if="${login.message != null}">
-		<span th:text="${login.message}"> </span>
+	<div th:if="${login != null}">
+		<div class="alert alert-success" align="center"
+			th:if="${login.message != null}">
+			<span th:text="${login.message}"> </span>
+		</div>
 	</div>
 	<div align="center">
 		<h1>Home</h1>
